@@ -12,6 +12,7 @@ public class ProductDao {
     private static final String DB_PATH = "jdbc:sqlite:path_to_db.db";
     private static final String INSERT_PRODUCT = "INSERT INTO product (name, price) VALUES (?,?);";
     private static final String SEL_BY_ID = "SELECT * FROM product WHERE id=?";
+    private static final String DELETE_BY_ID = "DELETE FROM product WHERE id=?";
 
     public ProductDao() {
 
@@ -66,5 +67,29 @@ public class ProductDao {
             }
         }
         return null;
+    }
+
+    public boolean deleteByID(int id) {
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(DB_PATH);
+            PreparedStatement ps = connection.prepareStatement(DELETE_BY_ID);
+            ps.setInt(1, id);
+
+            int row = ps.executeUpdate();
+            if (row == 1) {
+                connection.close();
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.print(e.getMessage());
+        } finally {
+            try {
+                if (connection != null) connection.close();
+            } catch(SQLException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+        return false;
     }
 }
