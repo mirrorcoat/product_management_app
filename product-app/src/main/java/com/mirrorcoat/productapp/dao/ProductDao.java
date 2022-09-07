@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import com.mirrorcoat.productapp.dto.Product;
 
 public class ProductDao {
+    private static final String DB_PATH = "jdbc:sqlite:path_to_db.db";
     private static final String INSERT_PRODUCT = "INSERT INTO product (name, price) VALUES (?,?);";
     private static final String SEL_BY_ID = "SELECT * FROM product WHERE id=?";
 
@@ -19,7 +20,7 @@ public class ProductDao {
     public boolean create(Product product) {
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:path_to_db.db");
+            connection = DriverManager.getConnection(DB_PATH);
             PreparedStatement ps = connection.prepareStatement(INSERT_PRODUCT);
             ps.setString(1, product.getName());
             ps.setInt(2, product.getPrice());
@@ -44,7 +45,7 @@ public class ProductDao {
     public Product findByID(int id) {
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:path_to_db.db");
+            connection = DriverManager.getConnection(DB_PATH);
             PreparedStatement ps = connection.prepareStatement(SEL_BY_ID);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
