@@ -7,30 +7,39 @@ import com.mirrorcoat.productapp.dto.Product;
 
 public class Main {
     public static void main(String[] args ) {
-        System.out.print("Enter a new product name: ");
         Scanner scan = new Scanner(System.in);
-        String pName = scan.next();
-
-        System.out.print("Enter a new product price: ");
-        int pPrice = scan.nextInt();
-
-        Product product = new Product(pName, pPrice);
-
-        // Scanner scan = new Scanner(System.in);
         ProductDao productDao = new ProductDao();
-        productDao.create(product);
+        String menuSelect = "";
 
-        // Product myProduct;
-        // System.out.println("Enter Product Id for the product you would like to see: ");
-        // int pId = scan.nextInt();
-        // myProduct = productDao.findByID(pId);
+        System.out.println("Welcome to the Product Management System App! (enter 'q' to quit)");
 
-        // if (myProduct != null) {
-        //     System.out.println(myProduct.toString());
-        // } else {
-        //     System.out.println("Product does not exist with that ID");
-        // }
+        while (!menuSelect.equals("q")) {
+            System.out.println("Pick an option:\n1. Add a new product\n2. Display a product (searches by ID)\n3. Delete a product (delete by ID)");
+            menuSelect = scan.next();
 
+            if (menuSelect.equals("1")) {
+                System.out.print("Enter a new product name: ");
+                String pName = scan.next();
+                System.out.print("Enter a new product price: ");
+                int pPrice = scan.nextInt();
+                productDao.create(new Product(pName, pPrice));
+            } else if (menuSelect.equals("2")) {
+                System.out.print("Enter ID of product to display: ");
+                int id = scan.nextInt();
+                Product product = productDao.findByID(id);
+                if (product != null) {
+                    System.out.println("\n" + product.toString() + "\n");
+                } else {
+                    System.out.println("No product exists with id: " + id);
+                }
+            } else if (menuSelect.equals("3")) {
+                System.out.print("Enter ID of product to delete: ");
+                int id = scan.nextInt();
+                productDao.deleteByID(id);
+            } else if (!menuSelect.equals("q")) {
+                System.out.println("Choice selected is not a valid option. Please select from the following:");
+            }
+        }
         scan.close();
     }
 }
