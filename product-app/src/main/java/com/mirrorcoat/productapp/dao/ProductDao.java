@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.mirrorcoat.productapp.dto.Product;
 
@@ -13,6 +14,7 @@ public class ProductDao {
     private static final String INSERT_PRODUCT = "INSERT INTO product (name, price) VALUES (?,?);";
     private static final String SEL_BY_ID = "SELECT * FROM product WHERE id=?";
     private static final String DELETE_BY_ID = "DELETE FROM product WHERE id=?";
+    private static final String SEL_ALL = "SELECT * FROM product";
 
     public ProductDao() {
 
@@ -67,6 +69,29 @@ public class ProductDao {
             }
         }
         return null;
+    }
+
+    public ArrayList<Product> getAllProducts() {
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(DB_PATH);
+            PreparedStatement ps = connection.prepareStatement(SEL_ALL);
+            ResultSet rs = ps.executeQuery();
+            ArrayList<Product> products = new ArrayList<>();
+            while (rs.next()) {
+                products.add(new Product(rs.getInt("id"), rs.getString("name"), rs.getInt("price")));
+            }
+            return products;
+        } catch (SQLException e) {
+            System.out.print(e.getMessage());
+        } finally {
+            try {
+                if (connection != null) connection.close();
+            } catch(SQLException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+        return new ArrayList<Product>();
     }
 
     public boolean deleteByID(int id) {

@@ -1,5 +1,6 @@
 package com.mirrorcoat.productapp;
 
+import java.util.List;
 import java.util.Scanner;
 
 import com.mirrorcoat.productapp.dao.ProductDao;
@@ -14,7 +15,7 @@ public class Main {
         System.out.println("Welcome to the Product Management System App! (enter 'q' to quit)");
 
         while (!menuSelect.equals("q")) {
-            System.out.println("Pick an option:\n1. Add a new product\n2. Display a product (searches by ID)\n3. Delete a product (delete by ID)");
+            System.out.print("Pick an option:\n1. Add a new product\n2. Display a product (searches by ID)\n3. Delete a product (delete by ID)\n4. Show all existing products\nSelection: ");
             menuSelect = scan.next();
 
             if (menuSelect.equals("1")) {
@@ -28,7 +29,7 @@ public class Main {
                 int id = scan.nextInt();
                 Product product = productDao.findByID(id);
                 if (product != null) {
-                    System.out.println("\n" + product.toString() + "\n");
+                    System.out.println(product.toString() + "\n");
                 } else {
                     System.out.println("No product exists with id: " + id);
                 }
@@ -36,6 +37,15 @@ public class Main {
                 System.out.print("Enter ID of product to delete: ");
                 int id = scan.nextInt();
                 productDao.deleteByID(id);
+            } else if (menuSelect.equals("4")) {
+                List<Product> products = productDao.getAllProducts();
+                if (!products.isEmpty()) {
+                    for (Product product : products) {
+                        System.out.println(product.toString() + "\n");
+                    }
+                } else {
+                    System.out.println("No existing products found.");
+                }
             } else if (!menuSelect.equals("q")) {
                 System.out.println("Choice selected is not a valid option. Please select from the following:");
             }
