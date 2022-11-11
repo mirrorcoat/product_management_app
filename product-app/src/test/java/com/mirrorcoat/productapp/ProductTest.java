@@ -15,9 +15,9 @@ public class ProductTest {
         Product product = new Product();
 
         product.setName("milk");
-        product.setPrice(2);
+        product.setPrice(3);
 
         assertEquals("milk", product.getName());
-        assertEquals(2, product.getPrice());
+        assertEquals(3, product.getPrice());
     }
 }
